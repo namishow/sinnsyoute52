@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本史探究 小テスト：初期議会と条約改正</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+    </style>
+</head>
+<body class="text-gray-800 flex flex-col justify-between min-h-screen p-3 md:p-6">
+
+    <!-- Header -->
+    <header class="max-w-3xl mx-auto w-full text-center my-3">
+        <div class="inline-flex items-center gap-1.5 bg-amber-400 text-amber-950 text-xs font-extrabold px-3 py-1 rounded-full mb-2 shadow">
+            <i class="fa-solid fa-graduation-cap"></i> 高校日本史探究 プリントNo.52 完全網羅
+        </div>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-wide shadow-text flex items-center justify-center gap-2">
+            <span>日露戦争マスター</span>
+        </h1>
+        <p class="text-indigo-200 text-xs md:text-sm mt-1">政党内閣の成立から中国分割・日英同盟・日露戦争・ポーツマス条約まで！</p>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-2xl mx-auto w-full flex-grow flex items-center justify-center">
+
+        <!-- START SCREEN -->
+        <div id="start-screen" class="glass-card rounded-3xl p-6 md:p-8 shadow-2xl w-full text-center transition-all duration-300">
+            <div class="text-5xl text-indigo-600 mb-3">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h2 class="text-2xl font-black text-gray-800 mb-2">日本史一問一答クイズ</h2>
+            <p class="text-gray-600 text-xs md:text-sm mb-5 leading-relaxed">
+                全16問の4択形式問題です。<br>
+                隈板内閣・山県有朋内閣の諸立法・北清事変・日英同盟・非戦論・ポーツマス条約・日比谷焼き打ち事件まで完璧網羅！
+            </p>
+
+            <div class="bg-indigo-50/80 rounded-2xl p-4 mb-6 text-left border border-indigo-100">
+                <h3 class="font-bold text-indigo-900 text-xs md:text-sm mb-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-star text-amber-500"></i> このクイズの特徴
+                </h3>
+                <ul class="text-xs text-indigo-800 space-y-1.5">
+                    <li><i class="fa-solid fa-check text-green-500 mr-1"></i> 正解・不正解の和風効果音（BGM/SE）付き</li>
+                    <li><i class="fa-solid fa-check text-green-500 mr-1"></i> 選択肢の答えの番号は完全均等（1~4各4問ずつ）</li>
+                    <li><i class="fa-solid fa-check text-green-500 mr-1"></i> ポーツマス条約・日英同盟の要点整理モーダル搭載</li>
+                </ul>
+            </div>
+
+            <button onclick="startQuiz()" class="pulse-animation w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-black text-lg py-3.5 px-8 rounded-2xl shadow-lg hover:shadow-indigo-500/50 transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-play"></i> テストを開始する！
+            </button>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div id="quiz-screen" class="glass-card rounded-3xl p-5 md:p-7 shadow-2xl w-full hidden transition-all duration-300">
+            <!-- Progress & Stats -->
+            <div class="flex justify-between items-center mb-3 pb-3 border-b border-gray-200">
+                <div class="flex items-center gap-2">
+                    <span id="question-number" class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">Q.1 / 16</span>
+                    <span id="combo-badge" class="hidden bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-bounce">
+                        <i class="fa-solid fa-fire"></i> <span id="combo-count">0</span> コンボ!
+                    </span>
+                </div>
+                <div class="text-sm font-bold text-gray-600">
+                    スコア: <span id="current-score" class="text-indigo-600 font-black text-lg">0</span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 rounded-full h-2 mb-5 overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Question Text -->
+            <div class="mb-5">
+                <span id="question-category" class="text-xs font-bold text-indigo-600 tracking-wider uppercase">日露戦争 (No.52)</span>
+                <h3 id="question-text" class="text-base md:text-lg font-bold text-gray-800 mt-1 leading-snug">
+                    問題文がここに入ります。
+                </h3>
+            </div>
+
+            <!-- Options -->
+            <div id="options-container" class="space-y-2.5 mb-5">
+                <!-- Option buttons generated by JS -->
+            </div>
+
+            <!-- Feedback Area (Explanation) -->
+            <div id="explanation-card" class="hidden bg-slate-800 text-white rounded-2xl p-4 mb-4 border border-slate-700 animate-fade-in">
+                <div class="flex items-center gap-2 mb-1">
+                    <span id="result-icon" class="text-xl"></span>
+                    <h4 id="result-text" class="font-extrabold text-sm md:text-base">正解！</h4>
+                </div>
+                <p id="explanation-text" class="text-xs md:text-sm text-slate-300 leading-relaxed">
+                    解説文がここに入ります。
+                </p>
+            </div>
+
+            <!-- Next Button -->
+            <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-6 rounded-xl shadow transition-all flex items-center justify-center gap-2">
+                次へ進む <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="glass-card rounded-3xl p-6 md:p-8 shadow-2xl w-full text-center hidden transition-all duration-300">
+            <div id="result-badge" class="inline-block p-4 rounded-full bg-amber-100 text-amber-500 text-4xl mb-3 shadow-inner">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <h2 class="text-2xl font-black text-gray-800 mb-1">テスト結果</h2>
+            <p id="result-rank" class="text-xs md:text-sm font-bold text-indigo-600 mb-4">ランク判定中...</p>
+
+            <div class="bg-indigo-50/80 rounded-2xl p-5 mb-5">
+                <div class="text-xs text-indigo-600 font-bold uppercase tracking-wider mb-1">最終スコア</div>
+                <div class="text-4xl md:text-5xl font-black text-indigo-900 mb-1">
+                    <span id="final-score">0</span> <span class="text-base font-normal text-indigo-700">/ 100 点</span>
+                </div>
+                <p id="correct-count-text" class="text-xs text-indigo-800">16問中 0問 正解</p>
+            </div>
+
+            <div id="result-comment" class="bg-white p-4 rounded-xl border border-gray-200 text-xs md:text-sm text-gray-700 mb-5 text-left leading-relaxed">
+                コメント
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2.5">
+                <button onclick="startQuiz()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-xl shadow transition-all flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-solid fa-rotate-right"></i> もう一度挑戦
+                </button>
+                <button onclick="toggleMnemonicsModal()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-white font-bold py-3 px-4 rounded-xl shadow transition-all flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-solid fa-lightbulb"></i> 日露戦争・ポーツマス条約の要点
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Mnemonics Modal (暗記ポイント) -->
+    <div id="mnemonics-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative max-h-[85vh] overflow-y-auto">
+            <button onclick="toggleMnemonicsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-lg font-black text-gray-800 mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-key text-amber-500"></i> 日露戦争・内閣変遷の要点整理
+            </h3>
+            <p class="text-xs text-gray-500 mb-4">プリントNo.52を完璧にする重要事項まとめ！</p>
+
+            <div class="space-y-2.5 text-xs text-gray-700">
+                <div class="p-3 bg-indigo-50 rounded-xl border border-indigo-200">
+                    <span class="font-bold text-indigo-900 block mb-1">🏛️ 内閣と政治の動き：</span>
+                    <p class="text-xs text-indigo-800">
+                        ・<b>第1次大隈重信内閣（隈板内閣）</b>：1898年 最初の政党内閣（憲政党）<br>
+                        ・<b>第2次山県有朋内閣</b>：治安警察法(1900)、軍部大臣現役武官制(1900)<br>
+                        ・<b>立憲政友会</b>：1900年 伊藤博文総裁が結成
+                    </p>
+                </div>
+                <div class="p-2.5 bg-amber-50 rounded-xl border border-amber-200">
+                    <span class="font-bold text-amber-900">🌏 中国分割と対外外交：</span>
+                    <ul class="list-disc list-inside mt-1 space-y-0.5 text-amber-900">
+                        <li><b>北清事変(1900)</b>：義和団戦争 → 8カ国連合軍出兵 → 北京議定書(1901)</li>
+                        <li><b>日英同盟(1902)</b>：イギリス「光栄ある孤立」を放棄。露の南下を警戒。</li>
+                    </ul>
+                </div>
+                <div class="p-2.5 bg-indigo-50 rounded-xl border border-indigo-200">
+                    <span class="font-bold text-indigo-800">🕊️ 非戦論とポーツマス条約（1905年9月）：</span>
+                    <p class="text-xs text-indigo-900 mt-1">
+                        ・<b>非戦論</b>：内村鑑三（キリスト教）、幸徳秋水・堺利彦（平民新聞）<br>
+                        ・<b>ポーツマス条約</b>：斡旋＝米大統領セオドア=ローズヴェルト / 日本全権＝小村寿太郎 / ロシア全権＝ウィッテ<br>
+                        ・<b>内容</b>：韓国における日本の優越権承認、旅順・大連の租借権、南満州鉄道利権、<b>北緯50度以南の樺太割譲</b>（※<b>賠償金は取れず</b>）<br>
+                        ・<b>結果</b>：賠償金不獲得への不満から<b>日比谷焼き打ち事件</b>発生！
+                    </p>
+                </div>
+            </div>
+
+            <button onclick="toggleMnemonicsModal()" class="w-full mt-5 bg-slate-800 text-white font-bold py-2.5 rounded-xl text-sm">
+                閉じる
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-indigo-200 py-3">
+        日本史探究 授業サポートアプリ | 日露戦争編
+    </footer>
+
+    <!-- JavaScript Quiz Logic & Web Audio API -->
+    <script>
+        // ... existing sound system code ...
+        class SoundFX {
+            // ... existing sound system implementation ...
+            constructor() {
+                this.ctx = null;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+
+            playCorrect() {
+                this.init();
+                const now = this.ctx.currentTime;
+                
+                const osc1 = this.ctx.createOscillator();
+                const osc2 = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc1.type = 'sine';
+                osc2.type = 'triangle';
+
+                osc1.frequency.setValueAtTime(659.25, now);
+                osc1.frequency.setValueAtTime(880, now + 0.1);
+
+                osc2.frequency.setValueAtTime(659.25, now);
+                osc2.frequency.setValueAtTime(880, now + 0.1);
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc1.start(now);
+                osc2.start(now);
+                osc1.stop(now + 0.4);
+                osc2.stop(now + 0.4);
+            }
+
+            playWrong() {
+                this.init();
+                const now = this.ctx.currentTime;
+
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.setValueAtTime(120, now + 0.15);
+
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+
+            playFinish() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+
+                notes.forEach((freq, index) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + index * 0.12);
+
+                    gain.gain.setValueAtTime(0.2, now + index * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.12 + 0.5);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now + index * 0.12);
+                    osc.stop(now + index * 0.12 + 0.5);
+                });
+            }
+        }
+
+        const sound = new SoundFX();
+
+        // ==========================================
+        // Quiz Data (16 Questions - Balanced Answers 1-4: 4 of each)
+        // Correct answers distribution:
+        // Option 0 (1番) -> 4件 [Q1, Q5, Q9, Q13]
+        // Option 1 (2番) -> 4件 [Q2, Q6, Q10, Q14]
+        // Option 2 (3番) -> 4件 [Q3, Q7, Q11, Q15]
+        // Option 3 (4番) -> 4件 [Q4, Q8, Q12, Q16]
+        // ==========================================
+        const quizData = [
+            // Q1: 正解 = 1番 (index 0)
+            {
+                category: "1. 政党内閣の誕生 (No.52)",
+                question: "1898年、自由党と進歩党が合流して結成された憲政党を母体として成立した、日本最初の政党内閣（内閣総理大臣・大隈重信、内務大臣・板垣退助）は通称何と呼ばれるか？",
+                options: [
+                    "隈板内閣（わいはんないかく）",
+                    "松隈内閣",
+                    "元勲内閣",
+                    "挙国一致内閣"
+                ],
+                answer: 0,
+                explanation: "第1次大隈重信内閣は、大隈の「隈」と板垣の「板」から「隈板内閣」と呼ばれた日本初の政党内閣です。"
+            },
+            // Q2: 正解 = 2番 (index 1)
+            {
+                category: "2. 山県有朋内閣の法制 (No.52)",
+                question: "第2次山県有朋内閣が1900年に制定した、社会運動・労働運動を取り締まり取締体制を強化した法令は何か？",
+                options: [
+                    "治安維持法",
+                    "治安警察法",
+                    "集会条例",
+                    "保安条例"
+                ],
+                answer: 1,
+                explanation: "1900年の治安警察法により、政治集会や労働運動の言論・行動に対する抑圧・取り締まりが強化されました。"
+            },
+            // Q3: 正解 = 3番 (index 2)
+            {
+                category: "3. 政党の結成 (No.52)",
+                question: "1900年、伊藤博文を総裁として結成され、旧憲政党などを吸収して明治後半から大正にかけて最大の勢力を誇った政党は何か？",
+                options: [
+                    "立憲改進党",
+                    "憲政本党",
+                    "立憲政友会",
+                    "立憲民政党"
+                ],
+                answer: 2,
+                explanation: "1900年に伊藤博文が立憲政友会を結成し、藩閥と政党の連携が本格化していきました。"
+            },
+            // Q4: 正解 = 4番 (index 3)
+            {
+                category: "4. 軍部と政治 (No.52)",
+                question: "第2次山県有朋内閣が1900年に定め、陸軍大臣・海軍大臣の補任資格を現役の大将・中将に限ると規定した制度は何か？",
+                options: [
+                    "文官任用令",
+                    "元老会議制度",
+                    "超然主義宣言",
+                    "軍部大臣現役武官制"
+                ],
+                answer: 3,
+                explanation: "軍部大臣現役武官制は、軍部が意に沿わない内閣の組閣を阻止する手段としても利用されることになりました。"
+            },
+            // Q5: 正解 = 1番 (index 0)
+            {
+                category: "5. 列強の中国分割 (No.52)",
+                question: "1898年の列強による中国分割において、ドイツが99年間の租借権を獲得した山東半島の港湾はどこか？",
+                options: [
+                    "膠州湾（こうしゅうわん）",
+                    "旅順・大連",
+                    "威海衛",
+                    "広州湾"
+                ],
+                answer: 0,
+                explanation: "ドイツは膠州湾、ロシアは旅順・大連、イギリスは威海衛・九竜半島、フランスは広州湾を租借しました。"
+            },
+            // Q6: 正解 = 2番 (index 1)
+            {
+                category: "6. アメリカの提唱 (No.52)",
+                question: "中国分割に乗り遅れたアメリカの国務長官ジョン=ヘイが1899年に提唱した外交原則は何か？",
+                options: [
+                    "超然主義",
+                    "門戸開放・機会均等",
+                    "満韓交換論",
+                    "新秩序宣言"
+                ],
+                answer: 1,
+                explanation: "ジョン=ヘイは「門戸開放」「機会均等」「主権尊重（領土保全）」の宣言を発表し、列強の利権独占を批判しました。"
+            },
+            // Q7: 正解 = 3番 (index 2)
+            {
+                category: "7. 北清事変と議定書 (No.52)",
+                question: "1900年に清国で起きた義和団戦争（北清事変）後、1901年に清国と8カ国連合軍の間で結ばれた講和条約は何か？",
+                options: [
+                    "天津条約",
+                    "下関条約",
+                    "北京議定書",
+                    "辛丑条約（ポーツマス条約）"
+                ],
+                answer: 2,
+                explanation: "1901年の北京議定書により、清国は巨額の賠償金の支払いと北京周辺への外国軍駐留権を認めさせられました。"
+            },
+            // Q8: 正解 = 4番 (index 3)
+            {
+                category: "8. 日英同盟 (No.52)",
+                question: "1902年に日英同盟が締結された際、それまで「光栄ある孤立」を保っていたイギリスが同盟を結んだ最大の対立相手国はどこか？",
+                options: [
+                    "アメリカ",
+                    "ドイツ",
+                    "フランス",
+                    "ロシア"
+                ],
+                answer: 3,
+                explanation: "東アジアにおけるロシアの南下政策（満州占領等）に対抗するため、日本とイギリスは日英同盟を結びました。"
+            },
+            // Q9: 正解 = 1番 (index 0)
+            {
+                category: "9. 非戦論の主張 (No.52)",
+                question: "日露戦争開戦前、幸徳秋水や堺利彦らが平民社を設立して発行し、反戦・非戦論を展開した新聞は何か？",
+                options: [
+                    "『平民新聞』",
+                    "『萬朝報』",
+                    "『東京日日新聞』",
+                    "『日本』"
+                ],
+                answer: 0,
+                explanation: "幸徳秋水や堺利彦は『萬朝報』が開戦論に転じたため退社し、平民社を立ち上げて『平民新聞』で非戦論を訴えました。"
+            },
+            // Q10: 正解 = 2番 (index 1)
+            {
+                category: "10. キリスト教的非戦論 (No.52)",
+                question: "日露戦争に際して、キリスト教的平和主義の立場から非戦論（絶対平和主義）を主張した思想家は誰か？",
+                options: [
+                    "戸水寛人",
+                    "内村鑑三",
+                    "与謝野晶子",
+                    "木下尚江"
+                ],
+                answer: 1,
+                explanation: "内村鑑三はキリスト教の「汝殺すなかれ」の教えに基づき、日露戦争に対する非戦論を唱えました。"
+            },
+            // Q11: 正解 = 3番 (index 2)
+            {
+                category: "11. 日露戦争の決戦 (No.52)",
+                question: "1905年5月、東郷平八郎率いる日本海軍の連合艦隊が、ロシアのバルチック艦隊を完膚なきまでに破った海戦は何か？",
+                options: [
+                    "黄海海戦",
+                    "豊島沖海戦",
+                    "日本海海戦",
+                    "旅順口海戦"
+                ],
+                answer: 2,
+                explanation: "日本海海戦で連合艦隊はバルチック艦隊を全滅させ、日露戦争の勝利を決定づけました。"
+            },
+            // Q12: 正解 = 4番 (index 3)
+            {
+                category: "12. ポーツマス条約の講和仲介 (No.52)",
+                question: "1905年9月に結ばれた日露講和条約（ポーツマス条約）で、両国のあっせん・仲介を行ったアメリカ大統領は誰か？",
+                options: [
+                    "ウィルソン",
+                    "マッキンリー",
+                    "タフト",
+                    "セオドア=ローズヴェルト"
+                ],
+                answer: 3,
+                explanation: "アメリカ大統領セオドア=ローズヴェルトの仲介により、アメリカのポーツマスで講和会議が開かれました。"
+            },
+            // Q13: 正解 = 1番 (index 0)
+            {
+                category: "13. ポーツマス条約の全権 (No.52)",
+                question: "ポーツマス講和会議において、酷評や世論の不満が予想される中で日本全権として強い交渉にあたった外務大臣は誰か？",
+                options: [
+                    "小村寿太郎",
+                    "陸奥宗光",
+                    "青木周蔵",
+                    "井上馨"
+                ],
+                answer: 0,
+                explanation: "日本全権は外相・小村寿太郎、ロシア全権はウィッテでした。"
+            },
+            // Q14: 正解 = 2番 (index 1)
+            {
+                category: "14. ポーツマス条約の領土割譲 (No.52)",
+                question: "ポーツマス条約により、日本がロシアから割譲を受けた地域はどこか？",
+                options: [
+                    "千島列島全島",
+                    "北緯50度以南の樺太（サハリン）",
+                    "カムチャツカ半島",
+                    "沿海州"
+                ],
+                answer: 1,
+                explanation: "日本は北緯50度以南の南樺太（サハリン）の割譲を受けました。"
+            },
+            // Q15: 正解 = 3番 (index 2)
+            {
+                category: "15. ポーツマス条約の不満と事件 (No.52)",
+                question: "ポーツマス条約で「賠償金が取れなかった」ことに対する民衆の激しい怒りが爆発し、東京で戒厳令が敷かれる事態となった騒擾事件は何か？",
+                options: [
+                    "大阪事件",
+                    "秩父事件",
+                    "日比谷焼き打ち事件",
+                    "米騒動"
+                ],
+                answer: 2,
+                explanation: "講和条件に納得できない群衆が日比谷公園の反対大会から暴動化し、日比谷焼き打ち事件（1905年9月5日）が起こりました。"
+            },
+            // Q16: 正解 = 4番 (index 3)
+            {
+                category: "16. ポーツマス条約の獲得権益 (No.52)",
+                question: "ポーツマス条約で日本がロシアから譲渡・承認された権益に含まれて「いない」ものはどれか？",
+                options: [
+                    "韓国（朝鮮）における日本の優越的地位の承認",
+                    "旅順・大連の租借権の譲渡",
+                    "長春以南の鉄道（南満州鉄道）とその付属利権の譲渡",
+                    "ロシアからの戦時賠償金（10億円）の支払"
+                ],
+                answer: 3,
+                explanation: "ロシアは戦時賠償金の支払いを拒否したため、日本は賠償金を獲得できませんでした（これが日比谷焼き打ち事件の原因となります）。"
+            }
+        ];
+
+        // ... existing quiz logic script ...
+        let currentIdx = 0;
+        let score = 0;
+        let combo = 0;
+        let correctNum = 0;
+        let isAnswered = false;
+
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+
+        const questionNumber = document.getElementById('question-number');
+        const comboBadge = document.getElementById('combo-badge');
+        const comboCount = document.getElementById('combo-count');
+        const currentScoreEl = document.getElementById('current-score');
+        const progressBar = document.getElementById('progress-bar');
+        const questionCategory = document.getElementById('question-category');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+
+        const explanationCard = document.getElementById('explanation-card');
+        const resultIcon = document.getElementById('result-icon');
+        const resultText = document.getElementById('result-text');
+        const explanationText = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+
+        function startQuiz() {
+            currentIdx = 0;
+            score = 0;
+            combo = 0;
+            correctNum = 0;
+            isAnswered = false;
+
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            showQuestion();
+        }
+
+        function showQuestion() {
+            isAnswered = false;
+            const q = quizData[currentIdx];
+
+            questionNumber.textContent = `Q.${currentIdx + 1} / ${quizData.length}`;
+            currentScoreEl.textContent = score;
+            progressBar.style.width = `${((currentIdx) / quizData.length) * 100}%`;
+
+            if (combo > 1) {
+                comboBadge.classList.remove('hidden');
+                comboCount.textContent = combo;
+            } else {
+                comboBadge.classList.add('hidden');
+            }
+
+            questionCategory.textContent = q.category;
+            questionText.textContent = q.question;
+
+            optionsContainer.innerHTML = '';
+            explanationCard.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3.5 md:p-4 rounded-2xl font-bold text-xs md:text-sm transition-all duration-200 border-2 border-gray-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/50 flex justify-between items-center group shadow-sm`;
+                btn.innerHTML = `
+                    <span class="flex items-center gap-2">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-gray-700 text-xs font-black group-hover:bg-indigo-600 group-hover:text-white shrink-0">${idx + 1}</span>
+                        <span>${opt}</span>
+                    </span>
+                    <i class="fa-regular fa-circle text-gray-300 group-hover:text-indigo-400 shrink-0 ml-2"></i>
+                `;
+                btn.onclick = () => checkAnswer(idx, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIdx, selectedBtn) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const q = quizData[currentIdx];
+            const buttons = optionsContainer.querySelectorAll('button');
+
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedIdx === q.answer) {
+                sound.playCorrect();
+                correctNum++;
+                combo++;
+                const gainedScore = 10 + (combo > 1 ? combo * 2 : 0);
+                score += gainedScore;
+
+                selectedBtn.className = "w-full text-left p-3.5 md:p-4 rounded-2xl font-bold text-xs md:text-sm border-2 border-emerald-500 bg-emerald-50 text-emerald-950 flex justify-between items-center shadow";
+                selectedBtn.querySelector('i').className = "fa-solid fa-circle-check text-emerald-600 text-xl shrink-0 ml-2";
+
+                resultIcon.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+                resultText.textContent = `正解！ (+${gainedScore}pt)`;
+                resultText.className = "font-extrabold text-sm md:text-base text-emerald-400";
+            } else {
+                sound.playWrong();
+                combo = 0;
+
+                selectedBtn.className = "w-full text-left p-3.5 md:p-4 rounded-2xl font-bold text-xs md:text-sm border-2 border-rose-500 bg-rose-50 text-rose-950 flex justify-between items-center shadow";
+                selectedBtn.querySelector('i').className = "fa-solid fa-circle-xmark text-rose-600 text-xl shrink-0 ml-2";
+
+                const correctBtn = buttons[q.answer];
+                correctBtn.className = "w-full text-left p-3.5 md:p-4 rounded-2xl font-bold text-xs md:text-sm border-2 border-emerald-500 bg-emerald-50 text-emerald-950 flex justify-between items-center shadow";
+                correctBtn.querySelector('i').className = "fa-solid fa-circle-check text-emerald-600 text-xl shrink-0 ml-2";
+
+                resultIcon.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400"></i>`;
+                resultText.textContent = "不正解...";
+                resultText.className = "font-extrabold text-sm md:text-base text-rose-400";
+            }
+
+            explanationText.textContent = q.explanation;
+            explanationCard.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+
+            currentScoreEl.textContent = score;
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if (currentIdx < quizData.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            sound.playFinish();
+
+            const finalScoreEl = document.getElementById('final-score');
+            const correctCountText = document.getElementById('correct-count-text');
+            const resultRank = document.getElementById('result-rank');
+            const resultComment = document.getElementById('result-comment');
+            const resultBadge = document.getElementById('result-badge');
+
+            const calculatedScore = Math.min(100, Math.round((correctNum / quizData.length) * 100));
+            finalScoreEl.textContent = calculatedScore;
+            correctCountText.textContent = `${quizData.length}問中 ${correctNum}問 正解`;
+
+            if (calculatedScore === 100) {
+                resultRank.textContent = "🏆 ランク：小村寿太郎・全権級（SS級）";
+                resultBadge.className = "inline-block p-4 rounded-full bg-amber-100 text-amber-500 text-5xl mb-3 shadow-inner";
+                resultComment.innerHTML = `<strong>完璧な成績です！</strong><br>隈板内閣や山県有朋内閣の立法から日英同盟・非戦論・ポーツマス条約まで完璧にマスターしています！`;
+            } else if (calculatedScore >= 80) {
+                resultRank.textContent = "🥇 ランク：桂太郎内閣級（A級）";
+                resultBadge.className = "inline-block p-4 rounded-full bg-indigo-100 text-indigo-600 text-5xl mb-3 shadow-inner";
+                resultComment.innerHTML = `<strong>素晴らしい高得点です！</strong><br>治安警察法・軍部大臣現役武官制やポーツマス条約の獲得権益の理解がしっかりできています！`;
+            } else if (calculatedScore >= 50) {
+                resultRank.textContent = "🥈 ランク：バルチック艦隊級（B級）";
+                resultBadge.className = "inline-block p-4 rounded-full bg-slate-100 text-slate-600 text-5xl mb-3 shadow-inner";
+                resultComment.innerHTML = `<strong>基本知識はバッチリです！</strong><br>中国分割の租借地やポーツマス条約で賠償金が取れなかった理由などを再確認しておきましょう！`;
+            } else {
+                resultRank.textContent = "🥉 ランク：復習が必要！（C級）";
+                resultBadge.className = "inline-block p-4 rounded-full bg-rose-100 text-rose-500 text-5xl mb-3 shadow-inner";
+                resultComment.innerHTML = `<strong>伸びしろ十分！</strong><br>授業プリントNo.52を読み直して、政党の動き・日英同盟・ポーツマス条約の内容を復習しよう！`;
+            }
+        }
+
+        function toggleMnemonicsModal() {
+            const modal = document.getElementById('mnemonics-modal');
+            modal.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
